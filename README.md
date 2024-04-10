@@ -23,7 +23,10 @@ Now, the Kraken2 result has to be modified for further experiments. First, the o
 
 Then, we filter out the sequences where Kraken2 has classified upto species level for training the models. For this use the notebook [`notebooks/kraken_taxonomic_levels.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/main/notebooks/kraken_taxonomic_levels.ipynb). 
 
-### 3️⃣ Ground Truth
+### 3️⃣ Obtaining Vector Embeddings for sequences
+Sequences have to be converted into vectors before feeding them into ML models. So we are obtaining a vector embedding for sequences based on their k-mer frequencies. We use [`seq2vec`](https://github.com/anuradhawick/seq2vec) for generating the vector embeddings. We are using k=4 in our experiments. You can use [`notebooks/seq2vec.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/main/notebooks/seq2vec.ipynb) notebook as well.
+
+
 
 
 

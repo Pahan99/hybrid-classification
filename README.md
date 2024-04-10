@@ -19,6 +19,13 @@ Since we are utilizing Kraken2 output for the approach, first we are obtaining t
 
 For running the tool, we have to provide a Kraken database to the tool. You can find the databases at https://benlangmead.github.io/aws-indexes/k2. Select the proper database and provide the relevant link in the above-mentioned notebook. For more help you can refer [`Kraken2 manual`](https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) as well.
 
+Now, the Kraken2 result has to be modified for further experiments. First, the output files of Kraken2 will be merged into a single .csv file. For that use the notebook [`notebooks/kraken_results.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/main/notebooks/kraken_results.ipynb). 
+
+Then, we filter out the sequences where Kraken2 has classified upto species level for training the models. For this use the notebook [`notebooks/kraken_taxonomic_levels.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/main/notebooks/kraken_taxonomic_levels.ipynb). 
+
+### 3️⃣ Ground Truth
+
+
 
 
 

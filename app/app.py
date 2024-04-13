@@ -2,6 +2,7 @@ import streamlit as st
 
 def main():
     st.set_page_config(layout="wide")
+    st.markdown('<link href="styles.css" rel="stylesheet">', unsafe_allow_html=True)
     st.title("🧬 Hybrid Sequence Classification")
 
     # Upload files
@@ -18,16 +19,16 @@ def main():
     with col2:
         uploaded_file_2 = st.file_uploader("Upload Kraken2 Report", type=["txt"])
 
-    if uploaded_file_1 and uploaded_file_2:
+    # if uploaded_file_1 and uploaded_file_2:
         # Button for hybrid classification
+    # st.markdown('<button class="button">Perform Hybrid Classification</button>', unsafe_allow_html=True)
+    st.button("Perform Hybrid Classification")
+    #     # Add code here to perform hybrid classification
+    #     st.header("Performing Hybrid Classification...")
+    #     # You can use the uploaded files for hybrid classification
 
-        if st.button("Perform Hybrid Classification"):
-            # Add code here to perform hybrid classification
-            st.header("Performing Hybrid Classification...")
-            # You can use the uploaded files for hybrid classification
-
-            # Display results
-            st.header("Results")
+    #     # Display results
+    #     st.header("Results")
 
 
 if __name__ == "__main__":

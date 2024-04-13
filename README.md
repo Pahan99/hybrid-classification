@@ -26,9 +26,23 @@ Then, we filter out the sequences where Kraken2 has classified upto species leve
 ### 3️⃣ Obtaining Vector Embeddings for sequences
 Sequences have to be converted into vectors before feeding them into ML models. So we are obtaining a vector embedding for sequences based on their k-mer frequencies. We use [`seq2vec`](https://github.com/anuradhawick/seq2vec) for generating the vector embeddings. We are using k=4 in our experiments. You can use [`notebooks/seq2vec.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/main/notebooks/seq2vec.ipynb) notebook as well.
 
+### 4️⃣ Building the Graph
+Graph is constructed using sequences as nodes and edges are made between them considering the overlaps between each sequence pair. Here we use [`seqtk`](https://github.com/lh3/seqtk) and [`Wtdbg2`](https://github.com/ruanjue/wtdbg2) for sequence manipulation and graph construction respectively. This process is implemented in the notebook [`notebooks/graph.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/app/notebooks/graph.ipynb) notebook.
 
+### 5️⃣ Graph Convolution Network (GCN)
+Graph generated using in above step is fed into a GCN. Here we employ a node classification task where nodes of are sequences. `data.npz` file generated in above step is used in this step.
 
+#### 5️⃣.1️⃣ Providing the labels for training & testing
+For training we are providing the Kraken2 output itself. Training set will be filtered from the dataset using a mask and for the test set we have to provide the ground truth. 
 
+Ground truth for simulated data can be found in the .fastq file itself which is generated from SimLoRD tool and ground truth for existing datasets can be found using minimap2 tool.
 
+* SimLoRD : Refer notebook [`notebooks/simlord.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/app/notebooks/simlord.ipynb)
+    * Code: https://bitbucket.org/genomeinformatics/simlord/src/master/
+    * Paper : https://academic.oup.com/bioinformatics/article/32/17/2704/2450740
+
+* Minimap2 : Refer notebook [`notebooks/minimap.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/app/notebooks/minimap.ipynb)
+    * Code: https://github.com/lh3/minimap2
+    * Paper: https://academic.oup.com/bioinformatics/article/34/18/3094/4994778
 
 

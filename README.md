@@ -32,10 +32,19 @@ Graph is constructed using sequences as nodes and edges are made between them co
 ### 5️⃣ Graph Convolution Network (GCN)
 Graph generated using in above step is fed into a GCN. Here we employ a node classification task where nodes of are sequences. `data.npz` file generated in above step is used in this step.
 
-#### 5️⃣.1️⃣ Providing the labels for training & testing
+#### 5️⃣.1️⃣ Generating the weight vector for modified loss function
+We are modifying the categorical cross entropy function using a weight for each sample which is derived using the Kraken2 output. To generate the weight vector, use the notebook [`notebooks/weights.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/app/notebooks/weights.ipynb).
+
+#### 5️⃣.2️⃣ Providing the labels for training & testing
 For training we are providing the Kraken2 output itself. Training set will be filtered from the dataset using a mask and for the test set we have to provide the ground truth. 
 
-Ground truth for simulated data can be found in the .fastq file itself which is generated from SimLoRD tool and ground truth for existing datasets can be found using minimap2 tool.
+Ground truth for simulated data can be found in the .fastq file itself which is generated from SimLoRD tool and ground truth for existing datasets can be found using minimap2 tool. Provide the ground truth in a .txt file which contains the true labels of the dataset with same order as in the sequence file.
+
+    Eg: Limosilactobacillus fermentum
+        Staphylococcus aureus
+        ...
+        Limosilactobacillus fermentum
+        Salmonella enterica
 
 * SimLoRD : Refer notebook [`notebooks/simlord.ipynb`](https://github.com/Pahan99/hybrid-classification/blob/app/notebooks/simlord.ipynb)
     * Code: https://bitbucket.org/genomeinformatics/simlord/src/master/

@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 
-from tools import run_kraken,run_seq2vec
+from tools import run_kraken,run_seq2vec,run_kbm2
 
 
 def kraken_prediction():
@@ -21,6 +21,7 @@ def vectorize():
 def build_graph():
     status_placeholder = st.empty()
     status_placeholder.write("3️⃣ Building graph...")
+    # run_kbm2()
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Graph built...</span>", unsafe_allow_html=True)
 

@@ -1,4 +1,5 @@
 import streamlit as st
+import kraken
 import time
 
 from tools import run_kraken,run_seq2vec,run_kbm2
@@ -10,6 +11,7 @@ def kraken_prediction():
     # run_kraken()
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Kraken2 prediction completed...</span>", unsafe_allow_html=True)
+
 
 def vectorize():
     status_placeholder = st.empty()
@@ -25,9 +27,18 @@ def build_graph():
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Graph built...</span>", unsafe_allow_html=True)
 
+def get_vector():
+    status_placeholder = st.empty()
+    status_placeholder.write("4️⃣ Getting Weight Vector...")
+    # kraken.get_kraken_results()
+    # kraken.get_kraken_taxonomic()
+    # kraken.get_weights()
+    time.sleep(5)
+    status_placeholder.write("<span style='color:#00d26a'>✅ Weight Vector Obtained...</span>", unsafe_allow_html=True)
+
 def train_model():
     status_placeholder = st.empty()
-    status_placeholder.write("4️⃣ Training model...")
+    status_placeholder.write("5️⃣ Training model...")
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Model trained...</span>", unsafe_allow_html=True)
 
@@ -36,6 +47,7 @@ def perform_prediction(sequence_input, database_input):
     kraken_prediction()
     vectorize()
     build_graph()
+    get_vector()
     train_model()
 
 def main():

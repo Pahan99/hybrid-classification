@@ -1,5 +1,5 @@
 import streamlit as st
-import kraken
+from kraken import get_kraken_results, get_kraken_taxonomic, get_weights
 import time
 
 from tools import run_kraken,run_seq2vec,run_kbm2
@@ -30,9 +30,9 @@ def build_graph():
 def get_vector():
     status_placeholder = st.empty()
     status_placeholder.write("4️⃣ Getting Weight Vector...")
-    # kraken.get_kraken_results()
-    # kraken.get_kraken_taxonomic()
-    # kraken.get_weights()
+    # get_kraken_results()
+    # get_kraken_taxonomic()
+    # get_weights()
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Weight Vector Obtained...</span>", unsafe_allow_html=True)
 

@@ -32,7 +32,7 @@ def get_vector():
     status_placeholder.write("4️⃣ Getting Weight Vector...")
     # get_kraken_results()
     # get_kraken_taxonomic()
-    # get_weights()
+    get_weights()
     time.sleep(5)
     status_placeholder.write("<span style='color:#00d26a'>✅ Weight Vector Obtained...</span>", unsafe_allow_html=True)
 
@@ -78,4 +78,6 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    run_kraken()
+    # run_kbm2()
+    # main()

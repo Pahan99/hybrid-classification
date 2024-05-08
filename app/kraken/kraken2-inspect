@@ -13,7 +13,7 @@ use File::Basename;
 use Getopt::Long;
 
 my $PROG = basename $0;
-my $KRAKEN2_DIR = '/mnt/e/FYP/test_code/kraken/kraken2/kraken';
+my $KRAKEN2_DIR = '/content/kraken';
 
 # Test to see if the executables got moved, try to recover if we can
 if (! -e "$KRAKEN2_DIR/classify") {

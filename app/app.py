@@ -1,80 +1,129 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
+
 from kraken import get_kraken_results, get_kraken_taxonomic, get_weights
 import time
 
 from tools import run_kraken,run_seq2vec,run_kbm2
 
+st.set_page_config(layout="wide")
+
+with open( "styles.css" ) as css:
+    st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
+
 
 def kraken_prediction():
-    status_placeholder = st.empty()
-    status_placeholder.write("1️⃣ Running Kraken2 prediction...")
     # run_kraken()
     time.sleep(5)
-    status_placeholder.write("<span style='color:#00d26a'>✅ Kraken2 prediction completed...</span>", unsafe_allow_html=True)
 
 
 def vectorize():
-    status_placeholder = st.empty()
-    status_placeholder.write("2️⃣ Vectorizing sequences...")
     # run_seq2vec()
     time.sleep(5)
-    status_placeholder.write("<span style='color:#00d26a'>✅ Sequences vectorized...</span>", unsafe_allow_html=True)
 
 def build_graph():
-    status_placeholder = st.empty()
-    status_placeholder.write("3️⃣ Building graph...")
-    # run_kbm2()
+# run_kbm2()
     time.sleep(5)
-    status_placeholder.write("<span style='color:#00d26a'>✅ Graph built...</span>", unsafe_allow_html=True)
 
 def get_vector():
-    status_placeholder = st.empty()
-    status_placeholder.write("4️⃣ Getting Weight Vector...")
-    # get_kraken_results()
+# get_kraken_results()
     # get_kraken_taxonomic()
     # get_weights()
     time.sleep(5)
-    status_placeholder.write("<span style='color:#00d26a'>✅ Weight Vector Obtained...</span>", unsafe_allow_html=True)
 
 def train_model():
-    status_placeholder = st.empty()
-    status_placeholder.write("5️⃣ Training model...")
     time.sleep(5)
-    status_placeholder.write("<span style='color:#00d26a'>✅ Model trained...</span>", unsafe_allow_html=True)
 
 # Function to perform prediction using KrakenBlend
-def perform_prediction(sequence_input, database_input):
-    kraken_prediction()
-    vectorize()
-    build_graph()
-    get_vector()
-    train_model()
+def perform_prediction(sequence_input, database_input, pl):
+    
+    placeholders = [
+    "⚪ Running Kraken prediction...",
+    "⚪ Vectorizing data...",
+    "⚪ Building graph...",
+    "⚪ Getting vector...",
+    "⚪ Training model..."
+]
+
+
+    for step, placeholder in enumerate(placeholders, start=1):
+        # with st.spinner('Running...'):
+            # Call your functions for each step here
+        if step == 1:
+            pl.write(placeholder)
+            kraken_prediction()
+        elif step == 2:
+            pl.write(placeholder)
+            vectorize()
+        elif step == 3:
+            pl.write(placeholder)
+            build_graph()
+        elif step == 4:
+            pl.write(placeholder)
+            get_vector()
+        elif step == 5:
+            pl.write(placeholder)
+            train_model()
+        pl.write(f"🟢 Completed...")
+    # Display a button to download results after completing all steps
+    return True
+        
 
 def main():
-    st.title("KrakenBlend: Hybrid Sequence Classification")
+    st.title("🧬 KrakenBlend")
+    with open("content/home.md", "r", encoding="utf-8") as file:
+        markdown_content = file.read()
+        st.write(markdown_content)
 
     # Prediction page
-    st.header("Get Prediction")
+    # st.header("Get Prediction")
+    # st.divider()
 
-    # Sequence data upload
-    sequence_file = st.file_uploader("Upload Sequence File (.fasta, .fastq)", type=["fasta", "fastq"])
+    with st.sidebar:
+        selected = option_menu(
+            menu_title="",
+            menu_icon = 'app-indicator',
+            options=["Predict","Analyse", "Help"],
+            icons=["arrow-right-circle","search", "info-circle"],
+            default_index=0
+        )
 
-    if sequence_file is not None:
-        sequence_data = sequence_file.read()
-    else:
-        sequence_data = None
+    if selected == "Predict":
+        # Split the content into two columns
+        col1, col2 = st.columns(2)
 
-    # Kraken2 database upload
-    database_file = st.file_uploader("Upload Kraken2 Database (.k2db)", type=["k2db"])
+        # Content for the first column
+        with col1:
+            sequence_file = st.file_uploader("Upload Sequence File (.fasta, .fastq)", type=["fasta", "fastq"])
+            if sequence_file is not None:
+                sequence_data = sequence_file.read()
+            else:
+                sequence_data = None
 
-    if database_file is not None:
-        database_data = database_file.read()
-    else:
-        database_data = None
+        # Content for the second column
+        with col2:
+            database_file = st.file_uploader("Upload Kraken2 Database (.k2db)", type=["k2db"])
+            if database_file is not None:
+                database_data = database_file.read()
+            else:
+                database_data = None
+        
+        pl = st.empty()
+        pl.write("Perform Hybrid Classification")
+        if st.button("Predict",type="primary"):
+            result = perform_prediction(sequence_data, database_data, pl)
+        st.divider()
+        st.button("Download Results")
+    if selected == "Analyse":
+        with open("content/analyse.md", "r", encoding="utf-8") as file:
+            markdown_content = file.read()
+            st.write(markdown_content)
 
+    if selected == "Help":
+        with open("content/help.md", "r", encoding="utf-8") as file:
+            markdown_content = file.read()
+            st.write(markdown_content)
     
-    if st.button("Predict", type="primary"):
-        prediction_result = perform_prediction(sequence_data, database_data)
         
 
 if __name__ == "__main__":

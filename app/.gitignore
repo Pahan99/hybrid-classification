@@ -4,3 +4,5 @@ db/
 *.fq
 *.tar.gz
 output/
+kbm2/build/
+__pycache__/

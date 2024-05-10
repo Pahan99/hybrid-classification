@@ -23,3 +23,6 @@ def evaluate_model(df):
 
     return accuracy, precision, recall, f1
     
+def save_uploaded(uploaded_file, filename):
+    with open(f"{filename}", "wb") as f:
+        f.write(uploaded_file.getvalue())

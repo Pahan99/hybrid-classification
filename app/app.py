@@ -6,7 +6,7 @@ import time
 import os
 
 from tools import run_kraken,run_seq2vec,run_kbm2
-from util import run_model, get_predictions, evaluate_model
+from util import run_model, get_predictions, evaluate_model, save_uploaded
 
 st.set_page_config(layout="wide")
 
@@ -114,7 +114,10 @@ def main():
         with col1:
             sequence_file = st.file_uploader("Upload Sequence File (.fasta, .fastq)", type=["fasta", "fastq"])
             if sequence_file is not None:
-                sequence_data = sequence_file.read()
+                save_uploaded(sequence_file, "reads.fasta")
+                print("Sequence file uploaded")
+                del sequence_file
+                # sequence_data = sequence_file.read()
             else:
                 sequence_data = None
 
@@ -122,7 +125,10 @@ def main():
         with col2:
             database_file = st.file_uploader("Upload Kraken2 Database (.tar.gz)", type=["tar.gz"])
             if database_file is not None:
-                database_data = database_file.read()
+                save_uploaded(database_file, "kraken_db.tar.gz")
+                print("Database file uploaded")
+                del database_file
+                # database_data = database_file.read()
             else:
                 database_data = None
         

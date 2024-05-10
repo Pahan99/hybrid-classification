@@ -3,7 +3,7 @@ import fileinput
 import gzip
 import numpy as np
 
-path = "./"
+path = "output/"
 
 if len(sys.argv) == 2:
     path = sys.argv[1] + "/"

@@ -8,3 +8,4 @@ def run_seq2vec():
 
 def run_kbm2():
     subprocess.run(["bash", "kbm2.sh"])
+    subprocess.run(["python3", "graph.py"])

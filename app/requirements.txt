@@ -1,2 +1,5 @@
 seaborn
 scikit-learn
+numpy
+torch
+biopython

@@ -1,8 +1,8 @@
 db/
-*.fasta
-*.fastq
-*.fq
-*.tar.gz
+/*.fasta
+/*.fastq
+/*.fq
+/*.tar.gz
 output/
-kbm2/build/
+kbm2/
 __pycache__/

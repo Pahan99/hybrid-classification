@@ -3,6 +3,7 @@
 html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif; 
     font-weight: 500;
+    overflow-y: hidden;
 }
 
 .sidebar .sidebar-content {

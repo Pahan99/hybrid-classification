@@ -3,15 +3,25 @@ from streamlit_option_menu import option_menu
 
 from kraken import get_kraken_results, get_kraken_taxonomic, get_weights
 import time
+import os
 
 from tools import run_kraken,run_seq2vec,run_kbm2
+from util import run_model, get_predictions, evaluate_model
 
 st.set_page_config(layout="wide")
 
 with open( "styles.css" ) as css:
     st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
 
-
+def download_file():
+    file_path = 'output/prediction.csv'
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as file:
+            file_content = file.read()
+        st.download_button(label="Download File", data=file_content, file_name=file_path, mime="text/plain")
+    else:
+        st.error("File not found.")
+        
 def kraken_prediction():
     # run_kraken()
     time.sleep(5)
@@ -22,16 +32,17 @@ def vectorize():
     time.sleep(5)
 
 def build_graph():
-# run_kbm2()
+    # run_kbm2()
     time.sleep(5)
 
 def get_vector():
-# get_kraken_results()
+    # get_kraken_results()
     # get_kraken_taxonomic()
     # get_weights()
     time.sleep(5)
 
 def train_model():
+    # run_model()
     time.sleep(5)
 
 # Function to perform prediction using KrakenBlend
@@ -69,6 +80,13 @@ def perform_prediction(sequence_input, database_input, pl):
     return True
         
 
+def evaluate(df): 
+    accuracy, precision, recall, f1 = evaluate_model(df)
+    st.write(f"Accuracy: {accuracy}")
+    st.write(f"Precision: {precision}")
+    st.write(f"Recall: {recall}")
+    st.write(f"F1 Score: {f1}")
+
 def main():
     st.title("🧬 KrakenBlend")
     with open("content/home.md", "r", encoding="utf-8") as file:
@@ -102,7 +120,7 @@ def main():
 
         # Content for the second column
         with col2:
-            database_file = st.file_uploader("Upload Kraken2 Database (.k2db)", type=["k2db"])
+            database_file = st.file_uploader("Upload Kraken2 Database (.tar.gz)", type=["tar.gz"])
             if database_file is not None:
                 database_data = database_file.read()
             else:
@@ -113,11 +131,25 @@ def main():
         if st.button("Predict",type="primary"):
             result = perform_prediction(sequence_data, database_data, pl)
         st.divider()
-        st.button("Download Results")
+        download_file()
+
     if selected == "Analyse":
+        col1, col2 = st.columns([2,1])
+        df = get_predictions()
         with open("content/analyse.md", "r", encoding="utf-8") as file:
             markdown_content = file.read()
             st.write(markdown_content)
+        with col1:
+            st.subheader("Predictions")
+            if os.path.exists("output/prediction.csv"):
+                st.dataframe(df, height=300, width=700)
+            else:
+                st.error("No predictions found. Please run the prediction first.")
+        with col2:
+            st.subheader("Evaluate")
+            st.file_uploader("Upload Ground Truth (.txt)", type=["txt"])
+            st.button("Evaluate", type="primary",on_click=evaluate(df))
+            
 
     if selected == "Help":
         with open("content/help.md", "r", encoding="utf-8") as file:

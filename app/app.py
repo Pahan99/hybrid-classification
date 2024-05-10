@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 from kraken import get_kraken_results, get_kraken_taxonomic, get_weights
 import time
 import os
+import gc
 
 from tools import run_kraken,run_seq2vec,run_kbm2
 from util import run_model, get_predictions, evaluate_model, save_uploaded
@@ -32,7 +33,7 @@ def vectorize():
     time.sleep(5)
 
 def build_graph():
-    # run_kbm2()
+    run_kbm2()
     time.sleep(5)
 
 def get_vector():
@@ -51,8 +52,8 @@ def perform_prediction(sequence_input, database_input, pl):
     placeholders = [
     "⚪ Running Kraken prediction...",
     "⚪ Vectorizing data...",
-    "⚪ Building graph...",
     "⚪ Getting vector...",
+    "⚪ Building graph...",
     "⚪ Training model..."
 ]
 
@@ -68,10 +69,10 @@ def perform_prediction(sequence_input, database_input, pl):
             vectorize()
         elif step == 3:
             pl.write(placeholder)
-            build_graph()
         elif step == 4:
             pl.write(placeholder)
             get_vector()
+            build_graph()
         elif step == 5:
             pl.write(placeholder)
             train_model()
@@ -117,6 +118,7 @@ def main():
                 save_uploaded(sequence_file, "reads.fasta")
                 print("Sequence file uploaded")
                 del sequence_file
+                gc.collect()
                 # sequence_data = sequence_file.read()
             else:
                 sequence_data = None
@@ -128,6 +130,7 @@ def main():
                 save_uploaded(database_file, "kraken_db.tar.gz")
                 print("Database file uploaded")
                 del database_file
+                gc.collect()
                 # database_data = database_file.read()
             else:
                 database_data = None

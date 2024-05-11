@@ -8,18 +8,20 @@ def run_model():
     subprocess.run(command, shell=True)
 
 def get_predictions():
-    # Read predictions from a CSV file
-    df = pd.read_csv("output/predictions.csv")
-    return df
+    try:
+        df = pd.read_csv("output/predictions.csv")
+        return df
+    except FileNotFoundError:
+        return None
 
 def evaluate_model(df):
     y_pred = df["Prediction"]
     ground_truth = np.array(open(f"ground_truth.txt").read().strip().split("\n"))
 
-    accuracy = accuracy_score(ground_truth, y_pred)
-    precision = precision_score(ground_truth, y_pred, average="weighted")
-    recall = recall_score(ground_truth, y_pred, average="weighted")
-    f1 = f1_score(ground_truth, y_pred, average="weighted")
+    accuracy = "{:.2f}%".format(100*accuracy_score(ground_truth, y_pred))
+    precision = "{:.2f}%".format(100*precision_score(ground_truth, y_pred, average="weighted"))
+    recall = "{:.2f}%".format(100*recall_score(ground_truth, y_pred, average="weighted"))
+    f1 = "{:.2f}%".format(100*f1_score(ground_truth, y_pred, average="weighted"))
 
     return accuracy, precision, recall, f1
     

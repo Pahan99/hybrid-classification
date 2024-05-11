@@ -15,13 +15,13 @@ with open( "styles.css" ) as css:
     st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
 
 def download_file():
-    file_path = 'output/prediction.csv'
+    file_path = 'output/predictions.csv'
     if os.path.exists(file_path):
         with open(file_path, "rb") as file:
             file_content = file.read()
-        st.download_button(label="Download File", data=file_content, file_name=file_path, mime="text/plain")
+        st.download_button(label="Download Results", data=file_content, file_name=file_path, mime="text/plain")
     else:
-        st.error("File not found.")
+        st.error("Results file not found. Please run the prediction first.")
         
 def kraken_prediction():
     # run_kraken()
@@ -33,7 +33,7 @@ def vectorize():
     time.sleep(5)
 
 def build_graph():
-    run_kbm2()
+    # run_kbm2()
     time.sleep(5)
 
 def get_vector():
@@ -50,11 +50,11 @@ def train_model():
 def perform_prediction(sequence_input, database_input, pl):
     
     placeholders = [
-    "⚪ Running Kraken prediction...",
-    "⚪ Vectorizing data...",
-    "⚪ Getting vector...",
-    "⚪ Building graph...",
-    "⚪ Training model..."
+    "🔄 Running Kraken prediction...",
+    "🔄 Vectorizing data...",
+    "🔄 Getting vector...",
+    "🔄 Building graph...",
+    "🔄 Training model..."
 ]
 
 
@@ -76,17 +76,20 @@ def perform_prediction(sequence_input, database_input, pl):
         elif step == 5:
             pl.write(placeholder)
             train_model()
-        pl.write(f"🟢 Completed...")
+        pl.write(f"✅ Completed...")
     # Display a button to download results after completing all steps
     return True
         
 
 def evaluate(df): 
     accuracy, precision, recall, f1 = evaluate_model(df)
-    st.write(f"Accuracy: {accuracy}")
-    st.write(f"Precision: {precision}")
-    st.write(f"Recall: {recall}")
-    st.write(f"F1 Score: {f1}")
+
+
+    with open("content/analyse.md", "r", encoding="utf-8") as file:
+        markdown_content = file.read()
+        formatted_content = markdown_content.format(accuracy=accuracy, precision=precision, recall=recall, f1=f1)
+        st.write(formatted_content)
+    
 
 def main():
     st.title("🧬 KrakenBlend")
@@ -136,7 +139,7 @@ def main():
                 database_data = None
         
         pl = st.empty()
-        pl.write("Perform Hybrid Classification")
+        pl.write("🚀 Perform Hybrid Classification")
         if st.button("Predict",type="primary"):
             result = perform_prediction(sequence_data, database_data, pl)
         st.divider()
@@ -149,15 +152,16 @@ def main():
             markdown_content = file.read()
             st.write(markdown_content)
         with col1:
-            st.subheader("Predictions")
-            if os.path.exists("output/prediction.csv"):
-                st.dataframe(df, height=300, width=700)
+            st.subheader("🎯 Predictions")
+            if df is not None:
+                st.dataframe(df, height=380, width=700)
             else:
                 st.error("No predictions found. Please run the prediction first.")
         with col2:
-            st.subheader("Evaluate")
+            st.subheader("🔎 Evaluate")
             st.file_uploader("Upload Ground Truth (.txt)", type=["txt"])
-            st.button("Evaluate", type="primary",on_click=evaluate(df))
+            if st.button("Evaluate", type="primary",disabled=(df is None)):
+                evaluate(df)
             
 
     if selected == "Help":

@@ -210,7 +210,7 @@ model = GNNModel(data.x.shape[1], no_classes, num_layers, device)
 criterion = nn.CrossEntropyLoss(reduction='none')
 optimizer = optim.Adam(model.parameters(), lr=0.01, weight_decay=10e-6)
 
-history = train_node_classifier(model, data, optimizer, criterion, n_epochs=150)
+history = train_node_classifier(model, data, optimizer, criterion, n_epochs=200)
 # torch.save(model, f'{result_path}/model.pkl')
 model.eval()
 pred = model(data).argmax(dim=1)
@@ -220,6 +220,6 @@ labels = np.load(f'{result_path}/labels.npy', allow_pickle=True)
 # print(id_list)
 
 labels[test_idx] = y_pred
-pred_df = pd.DataFrame({'read_id': id_list[:,0], 'predicted_label': labels})
+pred_df = pd.DataFrame({'Read ID': id_list[:,0], 'Prediction': labels})
 
 pred_df.to_csv(f'{result_path}/predictions.csv', index=False)

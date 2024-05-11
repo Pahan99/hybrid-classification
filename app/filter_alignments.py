@@ -5,8 +5,6 @@ import numpy as np
 
 path = "output/"
 
-if len(sys.argv) == 2:
-    path = sys.argv[1] + "/"
 
 class Alignment:
     def __init__(self, line):
@@ -92,6 +90,7 @@ def process_batch(alignments, fpe, fpd):
         # write only top 20 edges
         if n < 20:
             fpe.write(f"{a.qry_name}\t{a.ref_name}\n")
+            
 
     fpd.write(f"{alignments[0].qry_name}\t{degree}\n")
 
@@ -101,27 +100,27 @@ alns_buffer = []
 out_file_edges = open(path + 'reads.alns', 'w+')
 out_file_degree = open(path + 'degree', 'w+')
 
-for line in fileinput.input('-'):
-    if len(line.strip()) == 1:
-        continue
 
-    alignment = Alignment(line)
+with open(path + 'kbm2.txt', 'r') as file:
+    for line in file.readlines():
 
-    if alignment.qry_name != active_query:
-        # new query
-        # if there is a previous query process it
-        if len(alns_buffer) > 0:
-            process_batch(alns_buffer, out_file_edges, out_file_degree)
-            # sys.exit(0)
+        if len(line.strip()) == 1:
+            continue
+        alignment = Alignment(line)
 
-        # reset buffers
-        active_query = alignment.qry_name
-        alns_buffer = [alignment]
-    else:
-        alns_buffer.append(alignment)
+        if alignment.qry_name != active_query:
+            if len(alns_buffer) > 0:
+                process_batch(alns_buffer, out_file_edges, out_file_degree)
+                # sys.exit(0)
 
-if len(alns_buffer) > 0:
-    process_batch(alns_buffer, out_file_edges, out_file_degree)
+            # reset buffers
+            active_query = alignment.qry_name
+            alns_buffer = [alignment]
+        else:
+            alns_buffer.append(alignment)
+
+    if len(alns_buffer) > 0:
+        process_batch(alns_buffer, out_file_edges, out_file_degree)
 
 out_file_edges.close()
 out_file_degree.close()

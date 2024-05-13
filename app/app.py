@@ -148,9 +148,10 @@ def main():
     if selected == "Analyse":
         col1, col2 = st.columns([2,1])
         df = get_predictions()
-        with open("content/analyse.md", "r", encoding="utf-8") as file:
-            markdown_content = file.read()
-            st.write(markdown_content)
+        if df is not None:
+            with open("content/analyse.md", "r", encoding="utf-8") as file:
+                markdown_content = file.read()
+                st.write(markdown_content)
         with col1:
             st.subheader("🎯 Predictions")
             if df is not None:

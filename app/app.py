@@ -24,26 +24,26 @@ def download_file():
         st.error("Results file not found. Please run the prediction first.")
         
 def kraken_prediction():
-    # run_kraken()
+    run_kraken()
     time.sleep(5)
 
 
 def vectorize():
-    # run_seq2vec()
+    run_seq2vec()
     time.sleep(5)
 
 def build_graph():
-    # run_kbm2()
+    run_kbm2()
     time.sleep(5)
 
 def get_vector():
-    # get_kraken_results()
-    # get_kraken_taxonomic()
-    # get_weights()
+    get_kraken_results()
+    get_kraken_taxonomic()
+    get_weights()
     time.sleep(5)
 
 def train_model():
-    # run_model()
+    run_model()
     time.sleep(5)
 
 # Function to perform prediction using KrakenBlend
@@ -148,10 +148,7 @@ def main():
     if selected == "Analyse":
         col1, col2 = st.columns([2,1])
         df = get_predictions()
-        if df is not None:
-            with open("content/analyse.md", "r", encoding="utf-8") as file:
-                markdown_content = file.read()
-                st.write(markdown_content)
+        
         with col1:
             st.subheader("🎯 Predictions")
             if df is not None:
@@ -160,9 +157,18 @@ def main():
                 st.error("No predictions found. Please run the prediction first.")
         with col2:
             st.subheader("🔎 Evaluate")
-            st.file_uploader("Upload Ground Truth (.txt)", type=["txt"])
+            truth_file = st.file_uploader("Upload Ground Truth (.txt)", type=["txt"])
             if st.button("Evaluate", type="primary",disabled=(df is None)):
-                evaluate(df)
+                if df is not None:
+                    if truth_file is not None:
+                        save_uploaded(truth_file, "ground_truth.txt")
+                        print("Truth file uploaded")
+                        del truth_file
+                        gc.collect()
+                    evaluate(df)
+                    # with open("content/analyse.md", "r", encoding="utf-8") as file:
+                    #     markdown_content = file.read()
+                    #     st.write(markdown_content)
             
 
     if selected == "Help":

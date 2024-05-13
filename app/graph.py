@@ -56,7 +56,7 @@ def alignments_to_edges(alignments_file_path, edges_txt_path, read_id_idx):
                     print(f'Missing {u,v}')
 
 
-exp = "./output/"
+exp = "output/"
 alignments_file_path = exp + "reads.alns"
 degrees_file_path = exp + "degree"
 
